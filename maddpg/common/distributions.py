@@ -1,8 +1,8 @@
 import tensorflow as tf
 import numpy as np
-import maddpg.common.tf_util as U
+import maddpg.maddpg.common.tf_util as U
 from tensorflow.python.ops import math_ops
-from maddpg.common.multi_discrete import MultiDiscrete
+from maddpg.maddpg.common.multi_discrete import MultiDiscrete
 from tensorflow.python.ops import nn
 
 class Pd(object):
@@ -321,7 +321,9 @@ def make_pdtype(ac_space):
     elif isinstance(ac_space, spaces.MultiBinary):
         return BernoulliPdType(ac_space.n)
     else:
-        raise NotImplementedError
+        assert len(ac_space.shape) == 1
+        return DiagGaussianPdType(ac_space.shape[0])
+        #raise NotImplementedError
 
 def shape_el(v, i):
     maybe = v.get_shape()[i]
